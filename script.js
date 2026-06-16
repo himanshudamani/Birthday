@@ -3,14 +3,14 @@ const birthdayConfig = {
   fromName: "Himanshu",
   dateLabel: "17 June 2026",
   subtitle:
-    "I built a tiny universe in the stars — just for you. No crowd, no noise, only us.",
+  "Your tech guy built something special just for you.",
   letter:
-    "Happy Birthday, my love.\n\nYou make ordinary days feel like celebrations. I admire your kindness, your strength, and the way you light up every room without even trying.\n\nToday I just want you to feel deeply loved, seen, and appreciated. I hope this year brings you peace, growth, laughter, and every dream you whispered about.\n\nThank you for being my favorite person.",
+    "Happy Birthday, my love.\n\nThank you for being my safe space, my biggest headache, and my favourite person at the same time.\n\nLife kitni bhi complicated ho jaye, I always want you to be by my side.\n\n Thank you for all the love, care, fights, memories, and everything in between.",
   finalLine: "You are my best chapter. Happy Birthday.",
   timeline: [
-    { date: "The day we met", text: "Two strangers. One perfect beginning.", icon: "✨" },
-    { date: "Our first long call", text: "Hours felt like minutes.", icon: "📞" },
-    { date: "Our inside jokes era", text: "Still laughing at the same things.", icon: "😄" },
+    { date: "The day we met", text: "10 Sept 2023. One perfect beginning.", icon: "✨" },
+    { date: "Everything in between", text: "Countless fights, arguments, and most importantly, memories.", icon: "📞" },
+    { date: "Our proposal", text: "14 Feb 2026. My heart beats for you.", icon: "💍" },
     { date: "Today", text: "Celebrating the queen of my heart.", icon: "👑" }
   ],
   reasons: [
@@ -25,10 +25,10 @@ const birthdayConfig = {
 };
 
 const wishLevels = [
-  { max: 15, text: "A soft glow of sweetness" },
-  { max: 35, text: "Warm and radiant" },
-  { max: 55, text: "Sparkly and magical ✨" },
-  { max: 75, text: "Legendary birthday aura" },
+  { max: 15, text: "Itna kum?" },
+  { max: 35, text: "Thoda or badha be.." },
+  { max: 55, text: "Go go go ✨" },
+  { max: 75, text: "Legendary birthday aura incoming.." },
   { max: 100, text: "Cosmic queen energy unlocked 👑" }
 ];
 
