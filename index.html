@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday, Love</title>
+    <meta
+      name="description"
+      content="A personal birthday web letter made with love."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero card reveal">
+        <p class="eyebrow" id="dateLine"></p>
+        <h1 id="mainTitle">Happy Birthday, My Love</h1>
+        <p class="subtitle" id="subTitle"></p>
+        <button class="button" id="revealBtn">Tap to open your letter</button>
+      </section>
+
+      <section class="card hidden" id="letterCard">
+        <h2>A letter for you</h2>
+        <p id="letterText"></p>
+      </section>
+
+      <section class="card hidden" id="memoryCard">
+        <h2>Our little timeline</h2>
+        <ul id="timelineList" class="timeline"></ul>
+      </section>
+
+      <section class="card hidden" id="wishCard">
+        <h2>Birthday wish meter</h2>
+        <p class="small">Slide to reveal your birthday energy:</p>
+        <input type="range" id="wishSlider" min="1" max="100" value="30" />
+        <p class="wish-output" id="wishOutput">Sweet and calm</p>
+      </section>
+
+      <section class="card hidden final" id="finalCard">
+        <p class="small">For the most beautiful human in my world</p>
+        <h2 id="finalLine"></h2>
+        <p class="signature" id="signature"></p>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
