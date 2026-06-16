@@ -2,52 +2,113 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Happy Birthday, Love</title>
-    <meta
-      name="description"
-      content="A personal birthday web letter made with love."
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Happy Birthday, Shaanu</title>
+    <meta name="description" content="A little universe of love, made just for you." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main class="page">
-      <section class="hero card reveal">
-        <p class="eyebrow" id="dateLine"></p>
-        <h1 id="mainTitle">Happy Birthday, My Love</h1>
-        <p class="subtitle" id="subTitle"></p>
-        <button class="button" id="revealBtn">Tap to open your letter</button>
-      </section>
+    <canvas id="skyCanvas" aria-hidden="true"></canvas>
+    <div class="sparkle-field" id="sparkleField" aria-hidden="true"></div>
 
-      <section class="card hidden" id="letterCard">
-        <h2>A letter for you</h2>
-        <p id="letterText"></p>
-      </section>
+    <!-- Scene 1: Intro -->
+    <section class="scene scene-intro active" id="sceneIntro" data-scene="0">
+      <div class="intro-glow"></div>
+      <p class="intro-date" id="dateLine"></p>
+      <h1 class="intro-title">
+        <span class="line">Something special</span>
+        <span class="line accent" id="nameReveal"></span>
+        <span class="line">is waiting for you</span>
+      </h1>
+      <p class="intro-sub" id="subTitle"></p>
+      <button class="btn-primary pulse" id="startBtn">
+        <span>Begin the magic</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </section>
 
-      <section class="card hidden" id="memoryCard">
-        <h2>Our little timeline</h2>
-        <ul id="timelineList" class="timeline"></ul>
-      </section>
+    <!-- Scene 2: Envelope -->
+    <section class="scene scene-envelope" id="sceneEnvelope" data-scene="1">
+      <p class="scene-hint">Tap the envelope to open your letter</p>
+      <div class="envelope-wrap" id="envelope" role="button" tabindex="0" aria-label="Open birthday envelope">
+        <div class="envelope">
+          <div class="env-back"></div>
+          <div class="env-letter" id="envLetter">
+            <span class="heart-seal">♥</span>
+          </div>
+          <div class="env-flap"></div>
+          <div class="env-front"></div>
+        </div>
+        <div class="burst-hearts" id="burstHearts"></div>
+      </div>
+    </section>
 
-      <section class="card hidden" id="wishCard">
-        <h2>Birthday wish meter</h2>
-        <p class="small">Slide to reveal your birthday energy:</p>
-        <input type="range" id="wishSlider" min="1" max="100" value="30" />
-        <p class="wish-output" id="wishOutput">Sweet and calm</p>
-      </section>
+    <!-- Scene 3: Letter (typewriter) -->
+    <section class="scene scene-letter" id="sceneLetter" data-scene="2">
+      <div class="letter-paper">
+        <div class="letter-header">
+          <span class="wax">♥</span>
+          <h2>For you, my love</h2>
+        </div>
+        <p class="letter-body" id="letterText"></p>
+        <span class="cursor-blink" id="typeCursor">|</span>
+      </div>
+      <button class="btn-ghost hidden" id="letterNext">Continue our story →</button>
+    </section>
 
-      <section class="card hidden final" id="finalCard">
-        <p class="small">For the most beautiful human in my world</p>
-        <h2 id="finalLine"></h2>
-        <p class="signature" id="signature"></p>
-      </section>
-    </main>
+    <!-- Scene 4: Timeline -->
+    <section class="scene scene-timeline" id="sceneTimeline" data-scene="3">
+      <h2 class="section-title">Our little universe</h2>
+      <p class="section-sub">Moments that made us, us</p>
+      <div class="timeline-track" id="timelineTrack"></div>
+      <button class="btn-ghost hidden" id="timelineNext">Keep going →</button>
+    </section>
+
+    <!-- Scene 5: Love reasons -->
+    <section class="scene scene-reasons" id="sceneReasons" data-scene="4">
+      <h2 class="section-title">Why you're my favorite</h2>
+      <div class="reason-orbit" id="reasonOrbit"></div>
+      <p class="reason-center" id="reasonCenter">Tap a star</p>
+    </section>
+
+    <!-- Scene 6: Wish meter -->
+    <section class="scene scene-wish" id="sceneWish" data-scene="5">
+      <h2 class="section-title">Birthday energy</h2>
+      <p class="section-sub">Slide to unlock your aura</p>
+      <div class="meter-ring">
+        <svg viewBox="0 0 120 120">
+          <circle class="meter-bg" cx="60" cy="60" r="52" />
+          <circle class="meter-fill" id="meterFill" cx="60" cy="60" r="52" />
+        </svg>
+        <span class="meter-value" id="meterValue">0%</span>
+      </div>
+      <input type="range" id="wishSlider" min="0" max="100" value="0" />
+      <p class="wish-label" id="wishOutput">Slide to begin...</p>
+    </section>
+
+    <!-- Scene 7: Finale -->
+    <section class="scene scene-finale" id="sceneFinale" data-scene="6">
+      <div class="cake">
+        <div class="candle">
+          <div class="flame" id="flame"></div>
+          <div class="stick"></div>
+        </div>
+        <div class="cake-top"></div>
+        <div class="cake-body"></div>
+      </div>
+      <p class="finale-tag">Make a wish...</p>
+      <h2 class="finale-line" id="finalLine"></h2>
+      <p class="signature" id="signature"></p>
+      <button class="btn-primary" id="celebrateBtn">Celebrate with confetti</button>
+    </section>
+
+    <nav class="progress-dots" id="progressDots" aria-label="Story progress"></nav>
 
     <script src="./script.js"></script>
   </body>
