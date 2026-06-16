@@ -23,11 +23,15 @@ html {
 
 body {
   margin: 0;
-  font-family: "Outfit", sans-serif;
+  font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--text);
-  background: var(--bg);
-  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 15% 10%, #2a1548 0%, transparent 42%),
+    radial-gradient(circle at 85% 80%, #1f1038 0%, transparent 38%),
+    var(--bg);
+  overflow: hidden;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 #skyCanvas {
@@ -65,31 +69,50 @@ body {
 .scene {
   position: fixed;
   inset: 0;
-  z-index: 2;
-  min-height: 100vh;
-  min-height: 100dvh;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 28px 20px 60px;
+  padding: max(24px, env(safe-area-inset-top)) 20px max(72px, calc(60px + env(safe-area-inset-bottom)));
   opacity: 0;
-  transform: translateY(30px);
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.8s ease, transform 0.8s ease;
-  overflow-y: auto;
+  transform: translateY(24px) scale(0.98);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s ease,
+    visibility 0.55s;
+  overflow: hidden;
 }
 
 .scene.active {
+  z-index: 20;
   opacity: 1;
-  transform: translateY(0);
+  visibility: visible;
   pointer-events: auto;
+  transform: translateY(0) scale(1);
 }
 
 .scene.passed {
+  z-index: 1;
   opacity: 0;
-  transform: translateY(-20px);
+  visibility: hidden;
   pointer-events: none;
+  transform: translateY(-16px) scale(0.98);
+}
+
+.scene-inner {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 440px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 0;
 }
 
 /* ── Intro ── */
@@ -99,14 +122,16 @@ body {
 
 .intro-glow {
   position: absolute;
-  width: 280px;
-  height: 280px;
+  width: min(80vw, 320px);
+  height: min(80vw, 320px);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 107, 157, 0.25) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 107, 157, 0.35) 0%, transparent 70%);
   animation: breathe 4s ease-in-out infinite;
-  top: 30%;
+  top: 38%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
 }
 
 @keyframes breathe {
@@ -228,14 +253,16 @@ body {
 .envelope-wrap {
   position: relative;
   cursor: pointer;
-  perspective: 800px;
+  perspective: 900px;
   -webkit-tap-highlight-color: transparent;
+  padding: 20px;
 }
 
 .envelope {
   position: relative;
-  width: 260px;
-  height: 180px;
+  width: min(72vw, 280px);
+  height: 190px;
+  margin: 0 auto;
   transform-style: preserve-3d;
 }
 
@@ -256,6 +283,7 @@ body {
   background: linear-gradient(180deg, #f0d0e0 0%, #e0b8d0 100%);
   clip-path: polygon(0 100%, 50% 30%, 100% 100%);
   border-radius: 0 0 4px 4px;
+  z-index: 3;
 }
 
 .env-flap {
@@ -268,7 +296,9 @@ body {
   clip-path: polygon(0 0, 50% 100%, 100% 0);
   transform-origin: top center;
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 3;
+  z-index: 4;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .env-letter {
@@ -332,14 +362,18 @@ body {
 
 /* ── Letter ── */
 .letter-paper {
-  width: min(100%, 400px);
-  background: linear-gradient(180deg, rgba(255, 250, 252, 0.12) 0%, rgba(255, 240, 248, 0.06) 100%);
+  width: 100%;
+  background: linear-gradient(180deg, rgba(40, 20, 50, 0.85) 0%, rgba(25, 12, 35, 0.9) 100%);
   border: 1px solid var(--ring);
   border-radius: 4px 4px 20px 20px;
   padding: 28px 24px 32px;
   position: relative;
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.scene-letter.active .letter-paper {
   animation: paperIn 0.8s ease both;
 }
 
@@ -460,11 +494,12 @@ body {
 
 .timeline-content {
   flex: 1;
-  background: var(--glass);
+  background: rgba(30, 15, 40, 0.7);
   border: 1px solid var(--ring);
   border-radius: 16px;
   padding: 14px 16px;
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .timeline-content .t-date {
@@ -494,36 +529,38 @@ body {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 72px;
-  height: 72px;
-  margin: -36px 0 0 -36px;
+  width: 74px;
+  height: 74px;
+  margin: -37px 0 0 -37px;
   border-radius: 50%;
   border: 1px solid var(--ring);
-  background: var(--glass);
+  background: rgba(30, 15, 40, 0.75);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   line-height: 1.2;
   padding: 8px;
+  color: var(--text);
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+  transition: box-shadow 0.3s, background 0.3s;
+  transform: translate(var(--x), var(--y));
   animation: orbitFloat 4s ease-in-out infinite;
   animation-delay: var(--delay);
 }
 
 .reason-star:active,
 .reason-star.active {
-  background: linear-gradient(135deg, rgba(255, 107, 157, 0.3), rgba(183, 148, 246, 0.3));
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.45), rgba(183, 148, 246, 0.45));
   box-shadow: 0 0 24px rgba(255, 107, 157, 0.5);
-  transform: scale(1.1) !important;
 }
 
 @keyframes orbitFloat {
   0%, 100% { transform: translate(var(--x), var(--y)) scale(1); }
-  50% { transform: translate(var(--x), calc(var(--y) - 6px)) scale(1.03); }
+  50% { transform: translate(var(--x), calc(var(--y) - 8px)) scale(1.04); }
 }
 
 .reason-center {
@@ -561,8 +598,8 @@ body {
   stroke: url(#meterGradient);
   stroke-width: 8;
   stroke-linecap: round;
-  stroke-dasharray: 327;
-  stroke-dashoffset: 327;
+  stroke-dasharray: 326.73;
+  stroke-dashoffset: 326.73;
   transition: stroke-dashoffset 0.15s ease;
   filter: drop-shadow(0 0 8px rgba(255, 107, 157, 0.6));
 }
@@ -701,10 +738,10 @@ body {
 /* ── Progress dots ── */
 .progress-dots {
   position: fixed;
-  bottom: 20px;
+  bottom: max(20px, env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
-  z-index: 10;
+  z-index: 50;
   display: flex;
   gap: 8px;
   padding: 8px 14px;

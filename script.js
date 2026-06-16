@@ -79,18 +79,16 @@ function drawSky() {
     }
   });
 
-  confettiParticles.forEach((p, i) => {
+  confettiParticles = confettiParticles.filter((p) => {
     p.x += p.vx;
     p.y += p.vy;
     p.vy += 0.12;
     p.rotation += p.rotSpeed;
     p.life -= 0.008;
+    return p.life > 0;
+  });
 
-    if (p.life <= 0) {
-      confettiParticles.splice(i, 1);
-      return;
-    }
-
+  confettiParticles.forEach((p) => {
     ctx.save();
     ctx.translate(p.x, p.y);
     ctx.rotate(p.rotation);
@@ -176,9 +174,7 @@ function goToScene(index) {
   scenes[currentScene].classList.remove("passed");
   scenes[currentScene].classList.add("active");
   updateDots();
-
   onSceneEnter(currentScene);
-  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function nextScene() {
@@ -216,14 +212,6 @@ function hydratePage() {
       </div>`;
     track.appendChild(item);
   });
-
-  const svg = document.querySelector(".meter-ring svg");
-  const grad = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-  grad.innerHTML = `<linearGradient id="meterGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-    <stop offset="0%" stop-color="#ff6b9d"/>
-    <stop offset="100%" stop-color="#b794f6"/>
-  </linearGradient>`;
-  svg.prepend(grad);
 }
 
 function animateTimeline() {
@@ -240,7 +228,8 @@ function initReasons() {
   orbit.dataset.ready = "1";
 
   const reasons = birthdayConfig.reasons;
-  const radius = orbit.offsetWidth / 2 - 40;
+  const size = Math.min(window.innerWidth * 0.9, 340);
+  const radius = size / 2 - 48;
 
   reasons.forEach((text, i) => {
     const angle = (i / reasons.length) * Math.PI * 2 - Math.PI / 2;
@@ -249,6 +238,7 @@ function initReasons() {
 
     const star = document.createElement("button");
     star.className = "reason-star";
+    star.type = "button";
     star.textContent = text;
     star.style.setProperty("--x", `${x}px`);
     star.style.setProperty("--y", `${y}px`);
@@ -320,9 +310,10 @@ function startTypewriter() {
   setTimeout(type, 400);
 }
 
+const METER_CIRCUMFERENCE = 326.73;
+
 function updateMeter(value) {
-  const circumference = 327;
-  const offset = circumference - (value / 100) * circumference;
+  const offset = METER_CIRCUMFERENCE - (value / 100) * METER_CIRCUMFERENCE;
   $("meterFill").style.strokeDashoffset = offset;
   $("meterValue").textContent = `${value}%`;
 
@@ -383,6 +374,12 @@ initProgressDots();
 hydratePage();
 bindEvents();
 drawSky();
+
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => {
+    document.body.classList.add("fonts-ready");
+  });
+}
 
 window.addEventListener("resize", () => {
   resizeCanvas();
