@@ -1,6 +1,6 @@
 const birthdayConfig = {
   name: "Shaanu",
-  fromName: "Himanshu",
+  fromName: "Gunnu",
   dateLabel: "17 June 2026",
   subtitle:
   "Your tech guy built something special just for you.",
@@ -20,8 +20,8 @@ const birthdayConfig = {
     letter: ["./images/letter-1.jpg", "./images/letter-2.jpg"],
     gallery: [
       { src: "./images/gallery-1.jpg", caption: "Us being us", rotate: -5 },
-      { src: "./images/gallery-2.jpg", caption: "That smile I adore", rotate: 4 },
-      { src: "./images/gallery-3.jpg", caption: "A day I'll never forget", rotate: -3 },
+      { src: "./images/gallery-2.jpg", caption: "Keep smiling with me", rotate: 4 },
+      { src: "./images/gallery-3.jpg", caption: "The days we enjoyed", rotate: -3 },
       { src: "./images/gallery-4.jpg", caption: "Always you, always us", rotate: 6 },
       { src: "./images/gallery-5.jpg", caption: "My happy place", rotate: -2 }
     ]
