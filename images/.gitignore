@@ -1,0 +1,6 @@
+# Keep originals local only — website uses .jpg
+*.HEIC
+*.heic
+*.PNG
+*.png
+.DS_Store
