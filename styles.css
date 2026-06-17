@@ -517,6 +517,44 @@ body {
   color: #ede4f2;
 }
 
+.timeline-photo {
+  margin-top: 10px;
+  border: 0;
+  padding: 0;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  background: none;
+  position: relative;
+  aspect-ratio: 16 / 10;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s ease;
+}
+
+.timeline-photo:active {
+  transform: scale(0.98);
+}
+
+.timeline-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.timeline-photo::after {
+  content: "Tap to enlarge";
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  font-size: 0.65rem;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+}
+
 /* ── Reasons orbit ── */
 .reason-orbit {
   position: relative;
@@ -786,6 +824,232 @@ body {
 @keyframes floatUp {
   0% { opacity: 0.8; transform: translateY(0) rotate(0deg) scale(0.5); }
   100% { opacity: 0; transform: translateY(-100vh) rotate(360deg) scale(1); }
+}
+
+/* ── Photos & polaroids ── */
+.scene-inner-wide {
+  width: min(100%, 480px);
+}
+
+.intro-photo-wrap {
+  margin-bottom: 18px;
+  animation: polaroidFloat 5s ease-in-out infinite;
+}
+
+@keyframes polaroidFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+
+.polaroid {
+  background: #fff;
+  padding: 8px 8px 32px;
+  border-radius: 3px;
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.15);
+  width: min(58vw, 200px);
+  transform: rotate(var(--rot, -3deg));
+}
+
+.polaroid-intro {
+  margin: 0 auto;
+}
+
+.polaroid img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  background: linear-gradient(135deg, #f5d0e8, #d4b8f0);
+}
+
+.polaroid-caption {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #4a3048;
+}
+
+.letter-photos {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  width: 100%;
+}
+
+.letter-photo {
+  flex: 0 0 42%;
+  border: 0;
+  padding: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  scroll-snap-align: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.letter-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.film-strip {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  width: 100%;
+  padding: 8px 4px 16px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.film-strip::-webkit-scrollbar {
+  height: 4px;
+}
+
+.film-strip::-webkit-scrollbar-thumb {
+  background: var(--rose);
+  border-radius: 4px;
+}
+
+.film-frame {
+  flex: 0 0 72%;
+  max-width: 280px;
+  scroll-snap-align: center;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.film-frame.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.film-frame .polaroid {
+  width: 100%;
+  --rot: 0deg;
+}
+
+.polaroid-scatter {
+  position: relative;
+  width: 100%;
+  height: 0;
+}
+
+.heart-frame {
+  width: 130px;
+  height: 130px;
+  margin: 0 auto 16px;
+  padding: 4px;
+  background: linear-gradient(135deg, var(--rose), var(--lavender), var(--gold));
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(255, 107, 157, 0.45);
+  animation: heartPulse 3s ease-in-out infinite;
+}
+
+.heart-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #1a0a20;
+  display: block;
+}
+
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+.finale-photo-wrap {
+  margin-bottom: 8px;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(5, 2, 10, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeIn 0.3s ease;
+}
+
+.lightbox.hidden {
+  display: none !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.lightbox img {
+  max-width: min(100%, 420px);
+  max-height: 65vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-caption {
+  margin: 16px 0 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--rose-soft);
+  text-align: center;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--ring);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.2), rgba(183, 148, 246, 0.2));
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 12px;
 }
 
 @media (prefers-reduced-motion: reduce) {

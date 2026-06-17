@@ -2,6 +2,12 @@
 
 A clean, romantic birthday page built with plain HTML/CSS/JS (no frameworks).
 
+## Add photos
+
+1. Put your images in the `images/` folder (see `images/README.md` for exact filenames).
+2. Paths are configured in `script.js` under `birthdayConfig.images` and each timeline entry's `image` field.
+3. Missing images are hidden automatically — the page still works without them.
+
 ## Personalize in 2 minutes
 
 1. Open `script.js`

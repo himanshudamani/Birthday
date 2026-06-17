@@ -20,6 +20,12 @@
     <section class="scene scene-intro active" id="sceneIntro" data-scene="0">
       <div class="intro-glow" aria-hidden="true"></div>
       <div class="scene-inner">
+        <div class="intro-photo-wrap" id="introPhotoWrap" hidden>
+          <div class="polaroid polaroid-intro">
+            <img id="coverPhoto" src="" alt="Us" loading="eager" />
+            <span class="polaroid-caption">My favourite person</span>
+          </div>
+        </div>
         <p class="intro-date" id="dateLine"></p>
         <h1 class="intro-title">
           <span class="line">Something special</span>
@@ -60,6 +66,7 @@
           </div>
           <p class="letter-body" id="letterText"></p>
           <span class="cursor-blink" id="typeCursor">|</span>
+          <div class="letter-photos" id="letterPhotos" hidden></div>
         </div>
         <button class="btn-ghost hidden" id="letterNext" type="button">Continue our story →</button>
       </div>
@@ -74,7 +81,17 @@
       </div>
     </section>
 
-    <section class="scene scene-reasons" id="sceneReasons" data-scene="4">
+    <section class="scene scene-gallery" id="sceneGallery" data-scene="4">
+      <div class="scene-inner scene-inner-wide">
+        <h2 class="section-title">Captured moments</h2>
+        <p class="section-sub">Our little film roll — tap any frame</p>
+        <div class="film-strip" id="filmStrip"></div>
+        <div class="polaroid-scatter" id="polaroidScatter"></div>
+        <button class="btn-ghost hidden" id="galleryNext" type="button">This is us →</button>
+      </div>
+    </section>
+
+    <section class="scene scene-reasons" id="sceneReasons" data-scene="5">
       <div class="scene-inner">
         <h2 class="section-title">Why you're my favorite</h2>
         <div class="reason-orbit" id="reasonOrbit"></div>
@@ -82,7 +99,7 @@
       </div>
     </section>
 
-    <section class="scene scene-wish" id="sceneWish" data-scene="5">
+    <section class="scene scene-wish" id="sceneWish" data-scene="6">
       <div class="scene-inner">
         <h2 class="section-title">Birthday energy</h2>
         <p class="section-sub">Slide to unlock your aura</p>
@@ -104,8 +121,13 @@
       </div>
     </section>
 
-    <section class="scene scene-finale" id="sceneFinale" data-scene="6">
+    <section class="scene scene-finale" id="sceneFinale" data-scene="7">
       <div class="scene-inner">
+        <div class="finale-photo-wrap" id="finalePhotoWrap" hidden>
+          <div class="heart-frame">
+            <img id="finalePhoto" src="" alt="Together" loading="lazy" />
+          </div>
+        </div>
         <div class="cake">
           <div class="candle">
             <div class="flame" id="flame"></div>
@@ -122,6 +144,12 @@
     </section>
 
     <nav class="progress-dots" id="progressDots" aria-label="Story progress"></nav>
+
+    <div class="lightbox hidden" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo preview">
+      <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close">×</button>
+      <img id="lightboxImg" src="" alt="" />
+      <p class="lightbox-caption" id="lightboxCaption"></p>
+    </div>
 
     <script src="./script.js"></script>
   </body>

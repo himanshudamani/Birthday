@@ -8,11 +8,24 @@ const birthdayConfig = {
     "Happy Birthday, my love.\n\nThank you for being my safe space, my biggest headache, and my favourite person at the same time.\n\nLife kitni bhi complicated ho jaye, I always want you to be by my side.\n\n Thank you for all the love, care, fights, memories, and everything in between.",
   finalLine: "You are my best chapter. Happy Birthday.",
   timeline: [
-    { date: "The day we met", text: "10 Sept 2023. One perfect beginning.", icon: "✨" },
-    { date: "Everything in between", text: "Countless fights, arguments, and most importantly, memories.", icon: "📞" },
-    { date: "Our proposal", text: "14 Feb 2026. My heart beats for you.", icon: "💍" },
-    { date: "Today", text: "Celebrating the queen of my heart.", icon: "👑" }
+    { date: "The day we met", text: "10 Sept 2023. One perfect beginning.", icon: "✨", image: "./images/met.jpg" },
+    { date: "Everything in between", text: "Countless fights, arguments, and most importantly, memories.", icon: "📞", image: "./images/memories.jpg" },
+    { date: "Our proposal", text: "14 Feb 2026. My heart beats for you.", icon: "💍", image: "./images/proposal.jpg" },
+    { date: "Today", text: "Celebrating the queen of my heart.", icon: "👑", image: "./images/today.jpg" }
   ],
+  images: {
+    cover: "./images/cover.jpg",
+    coverCaption: "My favourite person",
+    finale: "./images/us.jpg",
+    letter: ["./images/letter-1.jpg", "./images/letter-2.jpg"],
+    gallery: [
+      { src: "./images/gallery-1.jpg", caption: "Us being us", rotate: -5 },
+      { src: "./images/gallery-2.jpg", caption: "That smile I adore", rotate: 4 },
+      { src: "./images/gallery-3.jpg", caption: "A day I'll never forget", rotate: -3 },
+      { src: "./images/gallery-4.jpg", caption: "Always you, always us", rotate: 6 },
+      { src: "./images/gallery-5.jpg", caption: "My happy place", rotate: -2 }
+    ]
+  },
   reasons: [
     "Your smile",
     "Your laugh",
@@ -32,19 +45,148 @@ const wishLevels = [
   { max: 100, text: "Cosmic queen energy unlocked 👑" }
 ];
 
-const SCENE_COUNT = 7;
+const SCENE_COUNT = 8;
 let currentScene = 0;
 let confettiParticles = [];
 let skyParticles = [];
 let envelopeOpened = false;
 let typewriterDone = false;
 let wishMaxed = false;
+let galleryReady = false;
 
 const canvas = document.getElementById("skyCanvas");
 const ctx = canvas.getContext("2d");
 
 function $(id) {
   return document.getElementById(id);
+}
+
+function loadImage(src) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = src;
+  });
+}
+
+function openLightbox(src, caption = "") {
+  $("lightboxImg").src = src;
+  $("lightboxImg").alt = caption || "Memory photo";
+  $("lightboxCaption").textContent = caption;
+  $("lightbox").classList.remove("hidden");
+}
+
+function closeLightbox() {
+  $("lightbox").classList.add("hidden");
+  $("lightboxImg").src = "";
+}
+
+function photoButton(src, caption, className, onReady) {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = className;
+  btn.addEventListener("click", () => openLightbox(src, caption));
+
+  const img = document.createElement("img");
+  img.src = src;
+  img.alt = caption || "Memory";
+  img.loading = "lazy";
+  img.addEventListener("error", () => btn.remove());
+  img.addEventListener("load", () => {
+    if (onReady) onReady();
+  });
+
+  btn.appendChild(img);
+  return btn;
+}
+
+async function setupCoverPhoto() {
+  const src = birthdayConfig.images?.cover;
+  if (!src) return;
+
+  const ok = await loadImage(src);
+  if (!ok) return;
+
+  const wrap = $("introPhotoWrap");
+  const img = $("coverPhoto");
+  img.src = src;
+  const caption = birthdayConfig.images.coverCaption;
+  if (caption) {
+    wrap.querySelector(".polaroid-caption").textContent = caption;
+  }
+  wrap.hidden = false;
+  img.addEventListener("click", () => openLightbox(src, caption));
+  img.style.cursor = "pointer";
+}
+
+async function setupFinalePhoto() {
+  const src = birthdayConfig.images?.finale;
+  if (!src) return;
+
+  const ok = await loadImage(src);
+  if (!ok) return;
+
+  const img = $("finalePhoto");
+  img.src = src;
+  $("finalePhotoWrap").hidden = false;
+  img.addEventListener("click", () => openLightbox(src, "Us ♥"));
+  img.style.cursor = "pointer";
+}
+
+async function setupLetterPhotos() {
+  const photos = birthdayConfig.images?.letter || [];
+  const container = $("letterPhotos");
+  let loaded = 0;
+
+  for (const src of photos) {
+    const ok = await loadImage(src);
+    if (!ok) continue;
+
+    const btn = photoButton(src, "A memory with you", "letter-photo");
+    container.appendChild(btn);
+    loaded += 1;
+  }
+
+  if (loaded > 0) container.hidden = false;
+}
+
+function initGallery() {
+  if (galleryReady) return;
+  galleryReady = true;
+
+  const strip = $("filmStrip");
+  const gallery = birthdayConfig.images?.gallery || [];
+  let loadedCount = 0;
+
+  gallery.forEach((item, i) => {
+    loadImage(item.src).then((ok) => {
+      if (!ok) return;
+
+      loadedCount += 1;
+      const frame = document.createElement("button");
+      frame.type = "button";
+      frame.className = "film-frame";
+      frame.style.transitionDelay = `${i * 0.12}s`;
+      frame.innerHTML = `
+        <div class="polaroid" style="--rot: ${item.rotate || 0}deg">
+          <img src="${item.src}" alt="${item.caption || "Memory"}" loading="lazy" />
+          <span class="polaroid-caption">${item.caption || ""}</span>
+        </div>`;
+      frame.addEventListener("click", () => openLightbox(item.src, item.caption));
+      strip.appendChild(frame);
+
+      requestAnimationFrame(() => frame.classList.add("visible"));
+
+      if (loadedCount === 1) {
+        $("galleryNext").classList.remove("hidden");
+      }
+    });
+  });
+
+  setTimeout(() => {
+    if (loadedCount > 0) $("galleryNext").classList.remove("hidden");
+  }, 1200);
 }
 
 function resizeCanvas() {
@@ -183,8 +325,9 @@ function nextScene() {
 
 function onSceneEnter(index) {
   if (index === 3) animateTimeline();
-  if (index === 4) initReasons();
-  if (index === 6) {
+  if (index === 4) initGallery();
+  if (index === 5) initReasons();
+  if (index === 7) {
     spawnConfetti(50);
     for (let i = 0; i < 5; i++) {
       setTimeout(spawnFloatHeart, i * 400);
@@ -204,14 +347,37 @@ function hydratePage() {
   birthdayConfig.timeline.forEach((entry) => {
     const item = document.createElement("div");
     item.className = "timeline-item";
+
+    const photoHtml = entry.image
+      ? `<button type="button" class="timeline-photo" data-src="${entry.image}" hidden>
+           <img src="${entry.image}" alt="${entry.date}" loading="lazy" />
+         </button>`
+      : "";
+
     item.innerHTML = `
       <div class="timeline-dot">${entry.icon}</div>
       <div class="timeline-content">
         <span class="t-date">${entry.date}</span>
         <p>${entry.text}</p>
+        ${photoHtml}
       </div>`;
+
+    if (entry.image) {
+      const photoBtn = item.querySelector(".timeline-photo");
+      const photoImg = photoBtn.querySelector("img");
+      photoImg.addEventListener("load", () => {
+        photoBtn.hidden = false;
+      });
+      photoImg.addEventListener("error", () => photoBtn.remove());
+      photoBtn.addEventListener("click", () => openLightbox(entry.image, entry.date));
+    }
+
     track.appendChild(item);
   });
+
+  setupCoverPhoto();
+  setupFinalePhoto();
+  setupLetterPhotos();
 }
 
 function animateTimeline() {
@@ -355,6 +521,12 @@ function bindEvents() {
 
   $("letterNext").addEventListener("click", nextScene);
   $("timelineNext").addEventListener("click", nextScene);
+  $("galleryNext").addEventListener("click", nextScene);
+
+  $("lightboxClose").addEventListener("click", closeLightbox);
+  $("lightbox").addEventListener("click", (e) => {
+    if (e.target === $("lightbox")) closeLightbox();
+  });
 
   $("wishSlider").addEventListener("input", (e) => {
     updateMeter(Number(e.target.value));
